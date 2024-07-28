@@ -1,8 +1,8 @@
 # Nome: Joás Gabriel Barros de Sousa
 # Matrícula: 2023011092
 .data
-	nome: .asciiz "Gabriel"
-	sobrenome: .asciiz "sara"
+	nome: .asciiz "Joas "
+	sobrenome: .asciiz "Gabriel"
 .globl main
 .text
 
@@ -54,11 +54,42 @@ menor:
 	j saida_strcmp
 
 
+strcat:
+	addi $sp, $sp, -12
+	sw $ra, 8($sp)
+	sw $s0, 4($sp)
+	sw $s1, 0($sp)
+	
+	jal strlen
+	add $s0, $v0, $zero
+	
+	add $s0, $s0, $a0
+	add $s1, $zero, $a1
+	
+	lb $t0, 0($s1)
+	sb $t0, 0($s0)
+loop_strcat:
+	addi $s0, $s0, 1
+	addi $s1, $s1, 1
+	
+	lb $t0, 0($s1)
+	beq $t0, 0, saida_strcat
+	sb $t0, 0($s0)
+	j loop_strcat
+saida_strcat:
+	sb $zero, 0($s0)
+	addi $v0, $zero, 0 #Para não retornar nada 	
+	lw $s1, 0($sp)
+	lw $s0, 4($sp)
+	lw $ra, 8($sp)
+	addi $sp, $sp, 12
+	jr $ra #volta ao programa principal
+
 main:
 	la $a0, nome
 	la $a1, sobrenome
-	jal strcmp
+	jal strcat
 	
-	add $a0, $v0, $zero
-	li $v0, 1
+	#add $a0, $v0, $zero
+	li $v0, 4
 	syscall	
