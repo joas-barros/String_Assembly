@@ -124,13 +124,39 @@ saida_strncat:
 	addi $sp, $sp, 16
 	jr $ra #volta ao programa principal
 
+
+strncpy:
+	addi $sp, $sp, -8
+	sw $s1, 4($sp)
+	sw $s0, 0($sp)
+	
+	add $s0, $s0, $zero
+	add $s1, $s1, $a2
+loop_strncpy:
+	add $t0, $a0, $s0
+	add $t1, $a1, $s0
+	
+	lb $t2, 0($t1)
+	beq $s0, $s1, saida_strncpy
+	sb $t2, 0($t0)
+	addi $s0, $s0, 1
+	j loop_strncpy
+saida_strncpy:
+	sb $zero, 0($t0)
+	lw $s0, 0($sp)
+	lw $s1, 4($sp)
+	addi $sp, $sp, 8
+	addi $v0, $zero, 0 #Para não retornar nada
+	jr $ra 
+
+
 main:
 	la $a0, nome
 	la $a1, sobrenome
 	la $t0, count
 	lw $a2, 0($t0)
-	jal strncat
-	
+	jal strncpy
+
 	#add $a0, $v0, $zero
 	li $v0, 4
 	syscall	
