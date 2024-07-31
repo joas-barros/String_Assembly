@@ -13,7 +13,7 @@ strlen:
 	addi $s0, $zero, 0  # Contador de caracteres "i", começando com i = 0 
 loop_strlen:
 	add $t0, $s0, $a0 # Armazena em $t0 o endereço do argumento mais o contador "$t0 = s[i]"
-	lb $t1, 0($t0) # Armazena o caractere no endereço $t0 em $t1
+	lb $t1, 0($t0) # Armazena o caractere do endereço $t0 em $t1
 	beq $t1, 0, saida_strlen # Verifica se s[i] == '/0' indicando o fim da string e saindo do loop
 	addi $s0, $s0, 1 # Caso não seja, adiciona 1 ao contador "i++"
 	j loop_strlen # Volta para o loop para conta mais um caractere
@@ -175,13 +175,13 @@ strncpy:
 	sw $s1, 4($sp)
 	sw $s0, 0($sp)
 	
-	add $s0, $s0, $zero # Contador i = 0
-	add $s1, $s1, $a2 # Atribui o valor de count em $s1
+	addi $s0, $zero, 0 # Contador i = 0
+	add $s1, $zero, $a2 # Atribui o valor de count em $s1
 loop_strncpy:
 	add $t0, $a0, $s0 # $t0 = dest[i]
 	add $t1, $a1, $s0 # $t1 = src[i]
 	
-	lb $t2, 0($t1) # Endereço de src[i] em $t2
+	lb $t2, 0($t1) # Caractere src[i] em $t2
 	beq $s0, $s1, saida_strncpy # Verifica se o contador é igual ao count (criterio de parada)
 	sb $t2, 0($t0) # Caso não seja, carregamos o caractere de src[i] em dest[i]
 	addi $s0, $s0, 1 # Acrescentamos no contador (i++)
